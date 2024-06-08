@@ -1,0 +1,212 @@
+.container-margin-minus-t {
+    margin-top: -50px;
+}
+
+.product-box .product-action .action-box {
+    width: auto;
+}
+
+.search-overlay-menu {
+    height: 100%;
+}
+
+.cart-title {
+    width: 21px;
+    height: 21px;
+    right: -17px;
+    top: -8px;
+}
+
+.btn-viewmore {
+    background: #f47435 !important;
+}
+
+.owl-carousel .owl-nav .owl-prev, .owl-carousel .owl-nav .owl-next {
+    background: #f47435;
+    color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.owl-carousel .owl-nav .owl-prev:hover, .owl-carousel .owl-nav .owl-next:hover {
+
+}
+
+.owl-carousel .owl-nav .owl-prev:before, .owl-carousel .owl-nav .owl-next:before {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.sidebar-icon-nav .cart-title #cart-total {
+    font-size: 12px;
+}
+
+.navigation-menu > ul > li.menudon {
+    position: unset;
+}
+
+.navigation-menu > ul > li.menudon.menu-dropdown-icon ul.nav-dropdown {
+    width: 100%;
+}
+
+.navigation-menu>ul>li .subnav-block {
+    display: none;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: #858688;
+    color: #fff;
+}
+
+.navigation-menu>ul>li .subnav-block a {
+    color: #fff;
+}
+
+.navigation-menu>ul>li .subnav-block a:hover {
+    color: #f47435;
+}
+
+.navigation-menu > ul > li:hover .subnav-block {
+    display: block;
+}
+
+.navigation-menu > ul > li.menudon.menu-dropdown-icon .subnav-block .nav-dropdown {
+    position: unset;
+    display: inline-block;
+    vertical-align: top;
+    width: 80%;
+    background: #858688;
+    color: #fff;
+}
+
+.navigation-menu > ul > li.menudon.menu-dropdown-icon li.dropdown-submenu.nav-item-lv2 {
+    width: 100%;
+    display: inline-block;
+    background: unset;
+}
+
+.navigation-menu .text-bottom-menu {
+    clear: both;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.navigation-menu > ul > li.menudon.menu-dropdown-icon li.dropdown-submenu.nav-item-lv2:nth-child(5n+1) {
+    clear: both;
+}
+
+.subnav-block .subnav-product {
+    width: 20%;
+    display: inline-block;
+}
+
+.subnav-block .subnav-product .subnav-img {
+    position: relative;
+    min-height: 250px;
+}
+
+.subnav-block .subnav-product .subnav-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: rgba(238, 238, 238, 0.63);
+}
+
+.subnav-block .subnav-product .subnav-content .subnav-name {
+    font-size: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+.subnav-block .subnav-product .subnav-content .subnav-btn {
+    font-size: 12px;
+    background: #333;
+    color: #fff;
+    padding: 7px 13px;
+}
+
+.navigation-menu > ul > li.menudon.menu-dropdown-icon li.dropdown-submenu.nav-item-lv2>ul {
+    display: block;
+    position: unset;
+    border: 0;
+    padding-left: 7px;
+    background: #858688;
+    color: #fff;
+}
+
+.navigation-menu > ul > li.menudon.menu-dropdown-icon li.dropdown-submenu.nav-item-lv2>ul>li>a {
+    font-weight: 500;
+}
+
+#promo {
+    padding: 30px 0;
+}
+
+.promo-box {
+    padding: 0;
+}
+
+.footer {
+    background: #858688;
+}
+
+.footer-block p, .footer-block a, .footer-block .social-icon li a {
+    color: #fff;
+}
+
+/*.copyrights a,*/
+/*.section .section-title p, .section .section-title a, .page-title,*/
+/*.navigation-menu > ul > li.menudon > a,*/
+/*.footer-block h6, .footer-block p, .footer-block a {*/
+    /*color: #f47435;*/
+/*}*/
+
+.product-box .product-name, .product-box .product-name a {
+    color: #f47435;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.product-box .product-price, .product-price,
+#quick-view-product .price, .main-container .col-main .cart .cart-tbody .item-cart div .price {
+    color: #858688;
+}
+
+.pdesc-box {
+    overflow: hidden;
+}
+
+.product-box .product-price {
+    font-size: 15px;
+}
+
+.home-album > .section {
+    padding: 10px 0 50px 0;
+}
+
+#new-product-home .product-box .product-price {
+    display: none;
+}
+.itemImgGll{
+    padding: 10px;
+    float: left;
+    width: 25%;
+}
+.navigation-menu>ul>li .subnav-block{
+    background: #858688d6 !important;
+}
+.navigation-menu>ul>li.menudon.menu-dropdown-icon .subnav-block .nav-dropdown{
+    background: #85868800 !important;
+}
+.large-video,.tp_product_detail_video,.tp_product_detail_tag,.tp_product_detail_suggest,
+.tp_product_detail_history,.tp_product_hot,.tp_product_discount,.tp_product_betseller,
+.tp_product_category_box{
+    display: none;
+}

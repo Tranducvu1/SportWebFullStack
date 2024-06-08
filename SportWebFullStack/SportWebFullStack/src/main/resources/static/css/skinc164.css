@@ -1,0 +1,58 @@
+#settingSkins {
+	position: fixed;
+	top: 40%;
+	background: #eee;
+	border: 1px solid #ccc;
+	text-align: center;
+	cursor: pointer;
+	transition: 0.5s all ease-in-out;
+	z-index: 9999;
+}
+#settingSkins>div>.tooltip {
+	width: 150px;
+	z-index: 9999;
+}
+#settingSkins>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	display: -webkit-flex;
+    -webkit-align-items: center;
+}
+#settingSkins.showSkin {
+    left: 0;
+}
+#settingSkins>div>.fa-cog {
+	padding: 10px;
+	font-size: 20px;
+	cursor: pointer;
+}
+#settingSkins>div>ul {
+	margin-bottom: 0;
+	display: inline-block;
+}
+#settingSkins>div>ul>li {
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	margin: 0 5px;
+}
+#settingSkins>div>ul>li.active {
+	box-shadow: 0 0 0 2px #fff;
+}
+#settingSkins>div>.fa-cog {
+		-webkit-animation: rotation 2s infinite linear;
+}
+@-webkit-keyframes rotation {
+	from {
+			-webkit-transform: rotate(0deg);
+	}
+	to {
+			-webkit-transform: rotate(359deg);
+	}
+}
+@media screen and ( max-width : 500px ) {
+    #settingSkins {
+    	position: fixed;
+    }
+}
