@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <title>Cập nhật sản phẩm</title>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" th:include="Admin/template/header :: header"></nav>
+    <div class="container-fluid" th:include="Admin/template/sidebar :: sidebar"></div>
+    <div class="col-md-9 animated bounce" style="margin-top: -45px; margin-left: 231px;">
+        <h2>Cập nhật sản phẩm</h2>
+        <form th:object="${products}" th:action="@{/admin/products/update/{id}(id=${products.id})}" method="POST" enctype="multipart/form-data">
+            <!-- Để cập nhật sản phẩm, cần truyền id của sản phẩm cần cập nhật -->
+            <input type="hidden" th:field="*{id}">
+            <h5 class="modal-title" id="exampleModalLabel">Cập nhật mặt hàng</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body">
+                <div class="row">
+                 <input type="hidden" th:field="*{id}">
+                    <div class="form-group col-md-7">
+                        <label for="">Mã mặt hàng</label>
+                        <input type="text" class="form-control" th:field="*{mamathang}">
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                        <label for="">Mã phân loại</label>
+                        <input type="text" class="form-control" th:field="*{maphanloai}">
+                    </div>
+                    
+                    <div class="form-group col-md-7">
+                        <label for="">Tên mặt hàng</label>
+                        <input type="text" class="form-control" th:field="*{tenmathang}">
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="">Đơn giá</label>
+                        <input type="number" class="form-control" th:field="*{dongia}" min="0">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="IDDM">Danh mục</label>
+                        <select name="IDDM" class="form-control" id="IDDM">
+                            <option value="">Chọn danh mục</option>
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.tendanhmuc}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                        <label for="nhaSXId">Hãng Sản Xuất</label>
+                        <select name="nhaSXId" class="form-control" id="nhaSXId">
+                            <option th:each="manufacturer : ${manufacturers}" th:value="${manufacturer.id}" th:text="${manufacturer.tenhang}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="">Số lượng</label>
+                        <input type="text" class="form-control" th:field="*{soluong}">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="gender">Giới tính</label>
+                        <select id="gender" name="gender" class="form-control" th:field="*{gender}">
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="">Size</label>
+                        <input type="text" class="form-control" th:field="*{size}" required="required">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="">Giảm giá</label>
+                        <input type="text" class="form-control" th:field="*{giamgia}" required="required">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="">Hình ảnh</label>
+                        <input type="file" class="form-control" name="hinhAnhPath" accept=".jpg, .jpeg, .png, .bmp, .webp">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="">Mô tả</label>
+                        <input type="text" class="form-control" th:field="*{mota}">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <input class="btn" type="submit" value="Cập nhật"/>
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <script>
+        $(function() {
+            $("#ngaythem").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        });
+
+        // Các script xử lý khác có thể điền vào đây nếu cần
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.9.0/jquery.serializejson.js"></script>
+    <script th:src="@{/js/sanPhamAjax.js}"></script>
+</body>
+</html>
