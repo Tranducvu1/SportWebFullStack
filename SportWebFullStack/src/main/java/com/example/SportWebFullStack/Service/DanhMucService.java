@@ -102,6 +102,15 @@ public class DanhMucService {
 		return  rs;
 	}
 	
+	public Boolean deleteDanhmuc(DanhMuc DanhMuc) {
+		String api = apiURL + "/delete/"+ DanhMuc.getId();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		RequestEntity<?> requestEntity = new RequestEntity<>(DanhMuc ,  HttpMethod.DELETE, URI.create(api));
+		ResponseEntity<Boolean> response = restTemplate.exchange(requestEntity, Boolean.class);
+		Boolean rs = response.getBody();
+		return  rs;
+	}
+	
 	public List<MatHang> GetByProduct(Integer selectedCategoryId) {
 		String api = apiURL + "/mathang/mathangbydanhmuc/"+ selectedCategoryId;
 		headers.setContentType(MediaType.APPLICATION_JSON);

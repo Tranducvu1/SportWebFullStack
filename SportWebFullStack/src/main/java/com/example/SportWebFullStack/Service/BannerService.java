@@ -78,7 +78,7 @@ public class BannerService {
 	}
 	public Boolean editBanner(Banner Banner) {
 
-		String api = apiURL + "/edit/"+ Banner.getId();
+		String api = apiURL + "/update/"+ Banner.getId();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		RequestEntity<?> requestEntity = new RequestEntity<>(Banner ,  HttpMethod.PUT, URI.create(api));
 		ResponseEntity<Boolean> response = restTemplate.exchange(requestEntity, Boolean.class);

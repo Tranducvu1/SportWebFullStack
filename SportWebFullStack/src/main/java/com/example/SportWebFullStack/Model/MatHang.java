@@ -34,6 +34,9 @@ public class MatHang {
     private Long dongia;
     private String danhgia;
     private int soluong; 
+    @Transient
+    @JsonIgnore
+    private int soluongsanpham;
     private String mota;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Timestamp ngaythem;

@@ -454,7 +454,7 @@ src="https://www.facebook.com/tr?id=453507135869629&amp;ev=PageView&amp;noscript
                         <div style="width: 6%" class="del-product">Xóa</div>
                     </div>
                     <!-- Đoạn mã HTML cho danh sách mặt hàng trong giỏ hàng -->
-<div class="cart-tbody">
+<div class="cart-tbody" >
     <div class="item-cart" th:each="item : ${cartItems}">
         <div style="width: 17%" class="image">
             <a class="product-image" th:href="@{/product/{idproduct}(idproduct=${item.id})}">
@@ -468,26 +468,16 @@ src="https://www.facebook.com/tr?id=453507135869629&amp;ev=PageView&amp;noscript
         </div>
         <div style="width: 15%" class="a-center">
             <span class="item-price">
-                <span class="price" id="price_${item.id}"  th:text="${item.dongia}"></span>
+                <span class="price" id="price_1" th:text="${item.dongia}"></span>
             </span>
         </div>
         <div style="width: 14%" class="a-center">
-            <div class="input_qty_pr relative">
-
-	
-	<input 
-	                type="number" 
-	                 min ="1" id="product_1_qty" />
-                
+            <div class="input_qty_pr relative">	
+			<input type="number"  min ="1" id="product_1_qty" value="1"  th:value="${item.soluongsanpham}"/>
             </div>
         </div>
-        
-        <div style="width: 15%" class="a-center">
-            
-<span class="price"  id="total" >
-    
-           
-            </span>
+        <div style="width: 15%" class="a-center">      
+			<span class="price" id="total"></span>
         </div>
         <div style="width: 6%">
             <a class="button remove_cart" title="Xóa" href="javascript:" data-id="${item.id}">
@@ -515,7 +505,7 @@ src="https://www.facebook.com/tr?id=453507135869629&amp;ev=PageView&amp;noscript
                 </table>
                 <ul class="checkout">
                     <li class="clearfix">
-                        <button class="btn btn-primary button btn-proceed-checkout f-right tp_button" title="Tiến hành đặt hàng" type="button" onclick="window.location.href='/cart/checkout'"><span style=" text-transform: initial; ">Đặt hàng</span></button>
+                        <button class="btn btn-primary button btn-proceed-checkout f-right tp_button" title="Tiến hành đặt hàng" type="button" onclick="window.location.href='/sport/cart/checkout'"><span style=" text-transform: initial; ">Đặt hàng</span></button>
                         <button class="btn btn-gray margin-right-15 f-right" title="Tiếp tục mua hàng" type="button" onclick="redirect(id)"><span style=" text-transform: initial; ">Tiếp tục mua hàng</span></button>
                     </li>
                 </ul>
@@ -689,57 +679,53 @@ margin-top:10px;
 
 </style><link rel="stylesheet" href="../web.nvnstatic.net/css/skinc164.css?v=9" type="text/css"><style type="text/css"> #settingSkins { left: -40px; }</style><div id="myModal" class="modal fade" role="dialog"></div>
 
-<script type="text/javascript">
-//Lấy số lượng từ localStorage
-let count = localStorage.getItem('count');
+ <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let cartItems = document.querySelectorAll('.item-cart');
+        cartItems.forEach(item => {
+            let productId = item.dataset.productId;
+            let quantityInput = item.querySelector('.input_qty_pr input');
+            let priceElement = item.querySelector('.item-price .price');
+            let totalElement = item.querySelector('.a-center .price');
 
-// Kiểm tra xem có null/undefined không
-if (count!=null){
-count = parseInt(count);
-} else {
-    count = 0;
-}
+            function updateTotal() {
+                const unitPrice = parseFloat(priceElement.innerText.replace(/[^0-9.-]+/g,""));
+                const quantity = parseInt(this.value);
+                const totalPrice = unitPrice * quantity;
 
-const spanEle = document.getElementById("cart-total");  
-spanEle.innerText = count;
-// Gán vào input để hiển thị
-// Lấy số lượng từ localStorage
-var qty = localStorage.getItem("product_1_qty");
+                totalElement.innerText = totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
+                // Gửi update lên server
+                $.ajax({
+                    url: '/product/updateCart',
+                    method: 'POST',
+                    data: { productId: productId, quantity: quantity },
+                    success: function(response) {
+                        if (response.success) {
+                            console.log('Cập nhật thành công');
+                        } else {
+                            console.log('Cập nhật thất bại');
+                        }
+                    }
+                });
+            }
 
-// Kiểm tra xem có lấy được giá trị hay không
-if(qty) {
+            quantityInput.addEventListener('change', updateTotal);
+            quantityInput.addEventListener('input', updateTotal);
+            updateTotal.call(quantityInput);
+        });
 
-  // Chuyển sang number để so sánh
-  qty = parseInt(qty);
+        // Xử lý xóa sản phẩm
+        let removeButtons = document.querySelectorAll('.remove_cart');
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                let productId = this.dataset.id;
+                // Thêm code xử lý xóa sản phẩm ở đây
+            });
+        });
+    });
+    </script>
 
-  // Giá trị nhỏ nhất là 1
-  if(qty < 1) {
-    qty = 1;
-  }
-
-  // Gán giá trị vào input để hiển thị
-  document.getElementById("product_1_qty").value = qty; 
-
-} else {
-  
-  // Mặc định là 1 nếu không có trong localStorage
-  document.getElementById("product_1_qty").value = 1;  
-
-}
-let price = document.getElementById("price_${item.id}").innerText;
-console.log(price); 
-console.log(qty);
-let total = price * qty; 
-console.log(total);
-// Hiển thị tổng tiền
-document.getElementById("total").innerText = total;
-</script>
-<script type="text/javascript">
-function redirect(id){
-    window.location.href = '/sport'; 
-}
-</script>
 </body>
 
 </html>

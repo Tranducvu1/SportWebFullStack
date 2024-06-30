@@ -1,6 +1,7 @@
 package com.example.SportWebFullStack.Controller.Admin;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.unit.DataSize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,34 +102,7 @@ public String quanLySanPhamPage(ModelMap modelMap, @RequestParam(value = "keywor
     modelMap.addAttribute("manufacturers", ManufacturerS);
     return "Admin/Products/ManagementProducts";
 }
-@GetMapping("/filter")
-public String FilterProducts(ModelMap modelMap,
-                             @RequestParam(value = "id", required = false) Integer productId,
-                             @RequestParam(value = "selectedCategory", required = false) Integer selectedCategoryId,
-                             @RequestParam(value = "selectedManufacturers", required = false) Integer selectedManufacturers,
-                             @RequestParam(value = "dongia", required = false) String priceRange,
-                             @RequestParam(value = "sapXeptheoGia", required = false) String sortOrder,
-                             @RequestParam(value = "keyword", required = false) String keyword) throws Exception {
-    // Lấy danh mục và nhà sản xuất từ service
-    DanhMuc category = null;
-    HangSanXuat manufacturer = null;
-    if (selectedCategoryId != null) {
-        category = danhMucService.getById(selectedCategoryId);
-    }
-    if (selectedManufacturers != null) {
-        manufacturer = hangSanXuatService.getById(selectedManufacturers);
-    }
-    
-    // Gọi API để lấy dữ liệu sản phẩm từ backend
-    List<MatHang> products = matHangService.getDataFromAPI(selectedCategoryId, selectedManufacturers, priceRange, sortOrder);
-    
-    // Đưa danh sách sản phẩm và các danh mục khác vào model để hiển thị trên view
-    modelMap.addAttribute("products", products);
-    modelMap.addAttribute("categories", category);
-    modelMap.addAttribute("manufacturers", manufacturer);
-    
-    return "Admin/Products/ManagementProducts";
-}
+
 
 @GetMapping("/new/products")
 public String showCreateProductForm(ModelMap modelmap) throws JsonMappingException, JsonProcessingException {
@@ -205,23 +180,9 @@ public String createProduct(@ModelAttribute("products") @Valid MatHang matHang,
         Files.copy(hinhanh.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         
         matHang.setHinhanh("/images/" + fileName);
-    	//Path path = Paths.get(filePath);
-    //	Files.copy(hinhanh.getInputStream(), path,StandardCopyOption.REPLACE_EXISTING);
-    	//matHang.setHinhAnhPath("/uploads/"+fileName);
+    
     }
-//    MultipartFile hinhanh = matHang.getHinhanh();
-//    String newFile = null;
-//    //check file
-//    if(hinhanh != null && !hinhanh.isEmpty()) {
-//    	newFile = UUID.randomUUID().toString()+"-"+hinhanh.getOriginalFilename();
-//    	String fileName = hinhanh.getOriginalFilename()
-//    	String applicantPath = request.getServletContext().getRealPath("");
-//    	String filePath = "/static/images/"+fileName;
-//    	//save file
-//    	Path path = Paths.get(filePath);
-//    	Files.copy(hinhanh.getInputStream(), path,StandardCopyOption.REPLACE_EXISTING);
-//    	matHang.setHinhAnhPath("/uploads/"+fileName);
-//    }
+
  // Kiểm tra xem hinhanhPath đã được lưu hay chưa
     if (matHang.getHinhAnhPath() != null && !matHang.getHinhAnhPath().isEmpty()) {
         System.out.println("Đường dẫn ảnh đã được lưu: " + matHang.getHinhAnhPath());
@@ -235,7 +196,7 @@ public String createProduct(@ModelAttribute("products") @Valid MatHang matHang,
 }
 
 
-@GetMapping("/products/update/{id}")
+@GetMapping("/update/products/{id}")
 public String showUpdateProducts(ModelMap modelMap, @PathVariable("id") Integer id,ModelMap modelmap) throws Exception {
     List<HangSanXuat> ManufacturerS = hangSanXuatService.getDataFromAPI();
     List<DanhMuc> dm = danhMucService.getDataFromAPI();
@@ -247,7 +208,7 @@ public String showUpdateProducts(ModelMap modelMap, @PathVariable("id") Integer 
 }
 
 
-@PostMapping("/products/update/{id}")
+@PostMapping("/update/products/{id}")
 public String UpdateProducts(@PathVariable("id") Integer id,@Validated MatHang matHang,@RequestParam("nhaSXId") Integer nhaSXId,
         				    @RequestParam("IDDM") Integer danhMucId,ModelMap modelMap) throws Exception {
     try {
@@ -310,21 +271,100 @@ public String UpdateProducts(@PathVariable("id") Integer id,@Validated MatHang m
 @GetMapping("/banner")
 public String Banner(ModelMap modelMap) throws JsonMappingException, JsonProcessingException, UnsupportedEncodingException {
 	modelMap.addAttribute("banners",this.bannerService.getDataFromAPI());
-	return "Admin/Banner/quanLyBanner";
+	return "Admin/Banner/ManagementBanner";
 }
 
-//@GetMapping("/new/banner")
-//public String TaoBannerMoi(ModelMap modelMap) throws JsonMappingException, JsonProcessingException, UnsupportedEncodingException {
-//	Banner bn = new Banner();
-//	modelMap.addAttribute("banners",bn);
-//	return "Admin/Banner/quanLyBanner";
-//}
-//
-//@PostMapping("/new/banner")
-//public String CreateBanner(ModelMap modelMap,Banner banner) throws JsonMappingException, JsonProcessingException, UnsupportedEncodingException {
-//	bannerService.post(banner);
-//	return "redirect:/admin/banner";
-//}
+@GetMapping("/new/banner")
+public String TaoBannerMoi(ModelMap modelMap) throws Exception {
+	return "Admin/Banner/CreateBanner";
+}
+
+@PostMapping("/new/banner")
+public String CreateBanner(ModelMap modelMap,@ModelAttribute("banners") Banner bn,BindingResult bindingResult) throws Exception {
+	if (bindingResult.hasErrors()) {
+        bindingResult.getAllErrors().forEach(error -> {
+            System.out.println(error.toString());
+        });
+       
+        return "Admin/Banner/CreateBanner";
+    }
+	System.out.println(bn);
+	MultipartFile hinhanh = bn.getHinhanhPath();
+    long fileSizeInBytes = hinhanh.getSize();
+	DataSize maxSize = DataSize.ofMegabytes(60);
+	if (fileSizeInBytes > maxSize.toBytes()) {
+		throw new Exception("Dung lượng ảnh vượt quá giới hạn cho phép");
+	}
+    //check file
+    if(hinhanh != null && !hinhanh.isEmpty()) {
+    	String fileName = StringUtils.cleanPath(hinhanh.getOriginalFilename());
+    	
+    	String uploadDir = "src/main/resources/static/banner";
+    	Path uploadPath = Paths.get(uploadDir);
+    	//save file
+    	
+    	if(!Files.exists(uploadPath)) {
+    		Files.createDirectories(uploadPath);
+    	}
+    	Path filePath = uploadPath.resolve(fileName);
+        Files.copy(hinhanh.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        
+        bn.setHinhanh("/banner/" + fileName);
+    
+    }
+    
+	bannerService.post(bn);
+	return "redirect:/admin/banner";
+}
+
+
+@GetMapping("/update/banner/{id}")
+public String showUpdateBanners(ModelMap modelMap, @PathVariable("id") Integer id,ModelMap modelmap) throws Exception {
+    Banner bn = this.bannerService.getById(id);
+    modelMap.addAttribute("banners", bn);
+    return "Admin/Banner/UpdateBanner";
+}
+
+
+@PostMapping("/update/banner/{id}")
+public String UpdateBanner(@PathVariable("id") Integer id,@Validated Banner bn,ModelMap modelMap) throws Exception {
+    try {
+   
+    	 MultipartFile hinhanh = bn.getHinhanhPath();
+    	    long fileSizeInBytes = hinhanh.getSize();
+    		DataSize maxSize = DataSize.ofMegabytes(60);
+    		if (fileSizeInBytes > maxSize.toBytes()) {
+    			throw new Exception("Dung lượng ảnh vượt quá giới hạn cho phép");
+    		}
+    	    //check file
+    	    if(hinhanh != null && !hinhanh.isEmpty()) {
+    	    	String fileName = StringUtils.cleanPath(hinhanh.getOriginalFilename());
+    	    	
+    	    	String uploadDir = "src/main/resources/static/banner";
+    	    	Path uploadPath = Paths.get(uploadDir);
+    	    	//save file
+    	    	
+    	    	if(!Files.exists(uploadPath)) {
+    	    		Files.createDirectories(uploadPath);
+    	    	}
+    	    	Path filePath = uploadPath.resolve(fileName);
+    	        Files.copy(hinhanh.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+    	        
+    	        bn.setHinhanh("/banner/" + fileName);
+    	    }
+    	    if (bn.getHinhanhPath()!= null && !bn.getHinhanhPath().isEmpty()) {
+    	        System.out.println("Đường dẫn ảnh đã được lưu: " + bn.getHinhanhPath());
+    	    } else {
+    	        throw new Exception("Lỗi: Không thể lưu đường dẫn ảnh");
+    	    }
+        bannerService.editBanner(bn);
+        return "redirect:/admin/banner";
+    } catch (Exception e) {
+    	e.printStackTrace();
+    	System.out.println("Lỗi"+e);
+        return "redirect:/admin/update/banner/" + id;
+    }
+}
 
 @GetMapping("/order")
 public String quanLyDonHangPage(ModelMap modelMap, @RequestParam(value = "keyword", required = false) String keyword) throws JsonMappingException, JsonProcessingException, UnsupportedEncodingException {
@@ -346,6 +386,27 @@ public DanhMuc findById(Integer id) throws Exception
 	return danhMucService.getById(id);
 }
 
+//@GetMapping("/tai-khoan")
+//public String quanLyTaiKhoanPage(Model model) {
+//  model.addAttribute("listVaiTro", vaiTroService.findAllVaiTro());
+//	return "admin/quanLyTaiKhoan";
+//}
+//@GetMapping("/profile")
+//public String profilePage(Model model, HttpServletRequest request) {
+//	model.addAttribute("user", getSessionUser(request));
+//	return "admin/profile";
+//}
+//
+//@PostMapping("/profile/update")
+//public String updateNguoiDung(@ModelAttribute NguoiDung nd, HttpServletRequest request) {
+//	NguoiDung currentUser = getSessionUser(request);
+//	currentUser.setDiaChi(nd.getDiaChi());
+//	currentUser.setHoTen(nd.getHoTen());
+//	currentUser.setSoDienThoai(nd.getSoDienThoai());
+//	nguoiDungService.updateUser(currentUser);
+//	return "redirect:/admin/profile";
+//}
+
 @GetMapping("/category")
 public String quanLyDanhMucPage(ModelMap modelMap, @RequestParam(value = "keyword", required = false) String keyword) throws JsonMappingException, JsonProcessingException, UnsupportedEncodingException {
 	if (keyword == null) {
@@ -357,37 +418,6 @@ public String quanLyDanhMucPage(ModelMap modelMap, @RequestParam(value = "keywor
         modelMap.addAttribute("Categorys", this.danhMucService.searchDataFromAPI(encodedKeyword));
     }
 	return "Admin/Category/ManagementCategory";
-}
-
-@GetMapping("/new/category")
-public String UICreate(ModelMap modelMap) throws JsonMappingException, JsonProcessingException, UnsupportedEncodingException {
-	DanhMuc ct = new DanhMuc();
-	modelMap.addAttribute("categorys",ct);
-	return "Admin/Category/CreateCategory";
-}
-
-@PostMapping("/new/category")
-public String CreateCategory(ModelMap modelMap,DanhMuc danhMuc) throws JsonMappingException, JsonProcessingException, UnsupportedEncodingException {
-	danhMucService.post(danhMuc);
-	return "redirect:/admin/category";
-}
-
-@GetMapping("/category/update/{id}")
-public String showEdit(ModelMap modelMap, @PathVariable("id") Integer id) throws Exception {
-    DanhMuc dm = this.danhMucService.getById(id);
-    modelMap.addAttribute("categorys", dm);
-    return "Admin/Category/UpdateCategory";
-}
-
-@PostMapping("/category/update/{id}")
-public String editCategory(@PathVariable("id") String id, @Validated DanhMuc danhMuc) throws Exception {
-    try {
-        danhMucService.editDanhMuc(danhMuc);
-        return "redirect:/admin/category";
-    } catch (Exception e) {
-    	e.printStackTrace();
-        return "redirect:/admin/category/update/" + id;
-    }
 }
 
 @GetMapping("/nhan-hieu")

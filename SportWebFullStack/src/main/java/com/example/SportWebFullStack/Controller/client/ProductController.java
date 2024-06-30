@@ -30,13 +30,16 @@ private DanhMucService danhMucService;
 private DonHangService donHangService;
 @Autowired
 private CartService cartService;
+
+
+
 @GetMapping("/product/{idproduct}")
-public String login(Model model, @PathVariable("idproduct") int idproduct) throws Exception {
+public String Addtocart(Model model, @PathVariable("idproduct") int idproduct) throws Exception {
 	try {
 		DonHang donhang = new DonHang();
-		MatHang matHang = this.matHangService.getById(idproduct);
+		MatHang matHang = matHangService.getById(idproduct);
+
 		model.addAttribute("product",matHang);
-		
 		model.addAttribute("donhang",donhang);
 	} catch (Exception e) {
 		// TODO: handle exception
@@ -61,6 +64,8 @@ public String addToCart(@PathVariable("idproduct") String productId, RedirectAtt
         int id = Integer.parseInt(productId);
         MatHang product = matHangService.getById(id);
         cartService.addToCart(product);
+		//matHang.getSoluongsanpham();
+		
         System.out.println(product);
         redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được thêm vào giỏ hàng");
     } catch (NumberFormatException e) {

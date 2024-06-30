@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+    <title>Thêm banner</title>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" th:include="Admin/template/header :: header"></nav>
+
+    <div class="container-fluid" th:include="Admin/template/sidebar :: sidebar"></div>
+    <div class="col-md-9 animated bounce" style="margin-top: -45px; margin-left: 231px;" >
+    <h2>Thêm banner</h2>
+    <form th:object="${banners}" th:action="@{/admin/new/banner}" method="POST"  enctype="multipart/form-data">
+        <label for="hinhanh">Hình ảnh:</label><br>
+        <input type="file" id="hinhanhPath" name="hinhanhPath" accept=".png"  required><br><br>
+        <br><br>
+        
+        <label for="mota">Mô tả:</label><br>
+        <input type="text" id="mota" name="mota" required><br><br>
+        
+        
+        <input type="submit" value="Tạo sản phẩm">
+    </form>
+    </div>
+      <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.9.0/jquery.serializejson.js"></script>
+    <script th:src="@{/js/sanPhamAjax.js}"></script>
+</body>
+</html>

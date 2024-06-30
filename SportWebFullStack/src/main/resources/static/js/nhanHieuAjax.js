@@ -5,7 +5,7 @@ $(document).ready(function() {
 	// do get
 	function ajaxGet(page){
 		// prepare data
-		var offset = (page-1)*10;
+		var offset = (page-1);
 		var pageSize = 10;
    	    var data = $('#searchForm').serialize();	
 		$.ajax({

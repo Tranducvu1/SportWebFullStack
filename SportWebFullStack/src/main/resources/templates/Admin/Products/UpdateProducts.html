@@ -15,7 +15,7 @@
     <div class="container-fluid" th:include="Admin/template/sidebar :: sidebar"></div>
     <div class="col-md-9 animated bounce" style="margin-top: -45px; margin-left: 231px;">
         <h2>Cập nhật sản phẩm</h2>
-        <form th:object="${products}" th:action="@{/admin/products/update/{id}(id=${products.id})}" method="POST" enctype="multipart/form-data">
+        <form th:object="${products}" th:action="@{/admin//update/products/{id}(id=${products.id})}" method="POST" enctype="multipart/form-data">
             <!-- Để cập nhật sản phẩm, cần truyền id của sản phẩm cần cập nhật -->
             <input type="hidden" th:field="*{id}">
             <h5 class="modal-title" id="exampleModalLabel">Cập nhật mặt hàng</h5>

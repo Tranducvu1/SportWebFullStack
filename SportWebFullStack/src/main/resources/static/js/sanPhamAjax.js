@@ -3,6 +3,9 @@ $(document).ready(function() {
 	// do get
 	function ajaxGet(page) {
     var offset = (page - 1); 
+    if(offset < 0){
+		offset =0;
+	}
     var pageSize = 10;
 		// prepare data
    	    var data = $('#searchForm').serialize();	
@@ -463,40 +466,41 @@ $(document).ready(function() {
 	});
 	
 	
-   $(document).on('keyup', '#searchByname', function (event) {
-    event.preventDefault();
-    var tenmathang = $('#searchByname').val(); // Lấy giá trị từ ô tìm kiếm
-    
-    if (tenmathang !== '') {
-        $('.sanPhamTable tbody tr').remove(); // Xóa các dòng sản phẩm hiện tại
-        $('.pagination li').remove(); // Xóa các mục phân trang hiện tại
-        var href = "http://localhost:4444/api/mathang/search/" + encodeURIComponent(tenmathang); 
-        console.log(encodeURIComponent(tenmathang))
-        $.get(href, function (sanPham) {
-            // Xử lý dữ liệu sản phẩm trả về từ API
-            $.each(sanPham, function (index, mathang) {
-                var sanPhamRow = '<tr>' +
-                	'<td>' + mathang.id + '</td>' +
-                    '<td>' + mathang.tenmathang + '</td>' +
-                    '<td>' + mathang.dongia + '</td>' +
-                    '<td>' + mathang.soluong + '</td>' +
-                    '<td>' + '<img src="/websport/img/' + mathang.id + '.png" class="img-responsive" style="height: 50px; width: 50px" />' + '</td>' +
-                    '<td>' + mathang.gender + '</td>' +
-                    '<td>' + mathang.size + '</td>' +
-                    '<td>' + mathang.gender + '</td>' +
-                    '<td>' + mathang.giamgia + '</td>' +
-                    '<td width="0%"><input type="hidden" id="sanPhamId" value="' + mathang.id + '"></td>' +
-                    '<td><button class="btn btn-warning btnChiTiet" style="margin-right: 6px">Chi tiết</button>' +
-                    '<button class="btn btn-primary btnCapNhat">Cập nhật</button>' +
-                    '<button class="btn btn-danger btnXoaSanPham">Xóa</button></td>' +
-                    '</tr>';
-                $('.sanPhamTable tbody').append(sanPhamRow); // Thêm dòng sản phẩm vào bảng
-            });
-        });
-    } else {
-        resetData(); // Gọi hàm resetData() nếu ô tìm kiếm trống
-    }
-});
+	   $(document).on('keyup', '#searchByname', function (event) {
+	    event.preventDefault();
+	    var tenmathang = $('#searchByname').val(); // Lấy giá trị từ ô tìm kiếm
+	    if (tenmathang !== '') {
+	        $('.sanPhamTable tbody tr').remove(); // Xóa các dòng sản phẩm hiện tại
+	        $('.pagination li').remove(); // Xóa các mục phân trang hiện tại
+	      //  var href = "http://localhost:4444/api/mathang/search?keyword=" + encodeURIComponent(tenmathang);
+	        var href = "http://localhost:4444/api/mathang/search?keyword=" + tenmathang;
+	        console.log(encodeURIComponent(tenmathang))
+	        $.get(href, function (sanPham) {
+	            // Xử lý dữ liệu sản phẩm trả về từ API
+	            $.each(sanPham, function (index, mathang) {
+					
+	                var sanPhamRow = '<tr>' +
+	                	'<td>' + mathang.id + '</td>' +
+	                    '<td>' + mathang.tenmathang + '</td>' +
+	                    '<td>' + mathang.dongia + '</td>' +
+	                    '<td>' + mathang.soluong + '</td>' +
+	                    '<td>' + '<img src="/websport/img/' + mathang.id + '.png" class="img-responsive" style="height: 50px; width: 50px" />' + '</td>' +
+	                    '<td>' + mathang.gender + '</td>' +
+	                    '<td>' + mathang.size + '</td>' +
+	                    '<td>' + mathang.gender + '</td>' +
+	                    '<td>' + mathang.giamgia + '</td>' +
+	                    '<td width="0%"><input type="hidden" id="sanPhamId" value="' + mathang.id + '"></td>' +
+	                    '<td><button class="btn btn-warning btnChiTiet" style="margin-right: 6px">Chi tiết</button>' +
+	                    '<button class="btn btn-primary btnCapNhat">Cập nhật</button>' +
+	                    '<button class="btn btn-danger btnXoaSanPham">Xóa</button></td>' +
+	                    '</tr>';
+	                $('.sanPhamTable tbody').append(sanPhamRow); // Thêm dòng sản phẩm vào bảng
+	            });
+	        });
+	    } else {
+	        resetData(); // Gọi hàm resetData() nếu ô tìm kiếm trống
+	    }
+	});
 	
     // fill input form với JSon Object
     function populate(frm, data) {

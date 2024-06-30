@@ -63,6 +63,8 @@ public class MatHangService {
 		
 	}
 	
+	
+	
 	public List<MatHang> getDataFromAPI(Integer danhMucId, Integer hangSanXuatId, String priceRange, String sortOrder)
             throws JsonProcessingException {
         // Tạo URL với các tham số truyền vào
@@ -187,25 +189,25 @@ public class MatHangService {
 
 	
 	
-	public String saveImage(MultipartFile file) throws IOException {
-	    String uploadDir = "/images/"; // Thư mục lưu trữ hình ảnh
-	    File uploadPath = new File(uploadDir);
-
-	    if (!uploadPath.exists()) {
-	        uploadPath.mkdirs(); // Tạo thư mục nếu chưa tồn tại
-	    }
-
-	    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-	    String filePath = Paths.get(uploadDir, fileName).toString();
-
-	    try (OutputStream os = new FileOutputStream(filePath)) {
-	        os.write(file.getBytes()); // Lưu trữ file vào thư mục
-	    } catch (IOException e) {
-	        throw new IOException("Lỗi khi lưu file: " + fileName, e);
-	    }
-
-	    return fileName; // Trả về tên file đã lưu
-	}
+//	public String saveImage(MultipartFile file) throws IOException {
+//	    String uploadDir = "/images/"; // Thư mục lưu trữ hình ảnh
+//	    File uploadPath = new File(uploadDir);
+//
+//	    if (!uploadPath.exists()) {
+//	        uploadPath.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+//	    }
+//
+//	    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//	    String filePath = Paths.get(uploadDir, fileName).toString();
+//
+//	    try (OutputStream os = new FileOutputStream(filePath)) {
+//	        os.write(file.getBytes()); // Lưu trữ file vào thư mục
+//	    } catch (IOException e) {
+//	        throw new IOException("Lỗi khi lưu file: " + fileName, e);
+//	    }
+//
+//	    return fileName; // Trả về tên file đã lưu
+//	}
 
 }
 

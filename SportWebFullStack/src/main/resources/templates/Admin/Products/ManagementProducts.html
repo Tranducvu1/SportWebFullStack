@@ -24,23 +24,23 @@
         <h3 class="page-header">Quản lý Sản Phẩm</h3>
         <hr>
 
-	<form class="form-inline" id="searchForm" name="searchObject"  th:action="@{/admin/filter}" method="GET">
+	<form class="form-inline" id="searchForm" name="searchObject" >
    <div class="form-group">
-        <select name="selectedCategory" class="form-control" id="danhMucId">
+        <select  class="form-control" id="danhMucId">
             <option value="">Tất cả danh mục</option>
             <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.tendanhmuc}"></option>
         </select>
     </div>
     
     <div class="form-group">
-        <select name="selectedManufacturers" class="form-control" id="nhaSXId">
+        <select  class="form-control" id="nhaSXId">
             <option value="">Tất cả hãng sản xuất</option>
             <option th:each="manufacturer : ${manufacturers}" th:value="${manufacturer.id}" th:text="${manufacturer.tenhang}"></option>
         </select>
     </div>
     
     <div class="form-group">
-        <select name="priceRange" id="dongia" class="form-control">
+        <select  id="dongia" class="form-control">
             <option value="">Tất cả giá</option>
             <option value="duoi-2-trieu">Dưới 2 triệu</option>
             <option value="2-trieu-den-4-trieu">2 triệu đến 4 triệu</option>
@@ -51,19 +51,19 @@
     </div>
 
     <div class="form-group">
-        <select name="sortOrder" id="sapXepTheoGia" class="form-control">
+        <select  id="sapXepTheoGia" class="form-control">
             <option value="asc">Sắp xếp theo giá tăng dần</option>
             <option value="desc">Sắp xếp theo giá giảm dần</option>
         </select>
     </div>
     
-    <button type="submit" class="btn btn-primary">Lọc</button>
+    <button type="button" id="filterButton" class="btn btn-primary">Lọc</button>
     &nbsp;&nbsp;
     <button class="btn btn-success btnThemDanhMuc">
         <a class="text-white" th:href="@{/admin/new/products}">Thêm sản phẩm</a>
     </button>
 </form>
-		<form method="get" action="/admin/san-pham" class="d-flex">
+		<form class="d-flex">
 		<div class="form-group form-inline"
 			style="float: right; margin-right: 10px; top: -33px; position: relative;">
 			<input class="form-control" type="text" id="searchByname"
@@ -84,7 +84,7 @@
 					<th>Hình ảnh</th>
 					<th>Giới tính</th>
 					<th>Size</th>
-					<th>Giới tính</th>
+					<th>Mô tả</th>
 					<th>Giảm giá</th>					
 				</tr>
 				
@@ -149,6 +149,88 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    let currentPage = 0;
+    const pageSize = 10;
+
+    function loadProducts(page) {
+        const danhMucId = $('#danhMucId').val();
+        const hangSanXuatId = $('#nhaSXId').val();
+        const priceRange = $('#dongia').val();
+        const sortOrder = $('#sapXepTheoGia').val();
+
+        $.ajax({
+            url: `http://localhost:4444/api/mathang/pagination/${page}/${pageSize}`,
+            type: 'GET',
+            data: {
+                danhMucId: danhMucId || null,
+                hangSanXuatId: hangSanXuatId || null,
+                priceRange: priceRange || null,
+                sortOrder: sortOrder || 'asc'
+            },
+            success: function(response) {
+                console.log(response);
+                displayProducts(response.content);
+                updatePagination(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Có lỗi xảy ra:', error);
+            }
+        });
+    }
+
+    $('#filterButton').click(function() {
+        currentPage = 0;
+        loadProducts(currentPage);
+    });
+
+    function displayProducts(products) {
+        var tableBody = $('.sanPhamTable tbody');
+        tableBody.empty();
+
+        $.each(products, function(index, product) {
+            tableBody.append(
+                '<tr>' +
+                '<td>' + product.id + '</td>' +
+                '<td>' + product.tenmathang + '</td>' +
+                '<td>' + product.dongia + '</td>' +
+                '<td>' + product.soluong + '</td>' +
+                '<td><img src="' + product.hinhanh + '" style="width: 50px; height: 50px;"></td>' +
+                '<td>' + product.gender + '</td>' +
+                '<td>' + product.size + '</td>' +
+                '<td>' + product.mota + '</td>' +
+                '<td>' + product.giamgia + '</td>' +
+                '</tr>'
+            );
+        });
+    }
+
+    function updatePagination(pageData) {
+        var pagination = $('.pagination');
+        pagination.empty();	
+        if (pageData.totalPages > 1) {
+            for (let i = 0; i < pageData.totalPages; i++) {
+                pagination.append(
+                    '<li class="page-item ' + (i === currentPage ? 'active' : '') + '">' +
+                    '<a class="page-link" href="#" data-page="' + i + '">' + (i + 1) + '</a>' +
+                    '</li>'
+                );
+            }
+        }
+
+        $('.page-link').click(function(e) {
+            e.preventDefault();
+            currentPage = parseInt($(this).data('page'));
+            loadProducts(currentPage);
+        });
+    }
+
+    // Khởi tạo tải trang đầu tiên
+    loadProducts(currentPage);
+});
+</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/2.9.0/jquery.serializejson.js"></script>
     <script th:src="@{/js/sanPhamAjax.js}"></script>
 </body>

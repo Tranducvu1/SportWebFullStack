@@ -204,7 +204,7 @@ src="https://www.facebook.com/tr?id=453507135869629&amp;ev=PageView&amp;noscript
                                     <label class="hidden" >Số lượng: </label>
                                     <div class="text-amount">Số lượng :</div>                                    <div class="custom custom-btn-number f-left">
                                         <!--<span class="qtyminus" data-field="quantity"><i class="fa fa-caret-left"></i></span>-->
-  <input type="number" id="quantity_product" value="1" >
+  <input type="number" id="quantity_product" value="1" th:text="${product.soluongsanpham}">
 
 
 	
@@ -216,6 +216,14 @@ src="https://www.facebook.com/tr?id=453507135869629&amp;ev=PageView&amp;noscript
         class="btn btn-lg btn-primary btnAddToCart tp_button">
   <span>Thêm vào giỏ hàng</span>  
 </button>
+
+  <!-- <button th:id="'product-' + ${product.id}" 
+        type="submit" 
+        th:onclick="'addToCart(' + ${product.id} + ')'" 
+        class="btn btn-lg btn-primary btnAddToCart tp_button" 
+        th:data-product-name="${product.tenmathang}">
+    <span>Thêm vào giỏ hàng</span>  
+</button> -->
                                             
                                     <a class="iWishAdd iwishAddWrapper" title="Yêu thích" href="javascript:" rel="39106611"><i class="fa fa-heart-o"></i></a>                                </div>
                                                                 <div>
@@ -456,49 +464,42 @@ margin-top:10px;
         });
     </script>
  -->
-<script>
+ <script>
+document.addEventListener('DOMContentLoaded', function() {
+var quantityInput = document.getElementById('quantity_product');
+var btnAdd = document.getElementById("product-1");
+let cartCount = 0;
 
-function addToCart(productId) {
-
-  // Lấy giá trị quantity   
-  var qty = document.getElementById("quantity_product").value;
-  var quantity = qty.value; 
-  // Kiểm tra xem có lấy được giá trị không
-  console.log("Quantity: ", qty); 
-
-  // Lưu vào localStorage
-  localStorage.setItem("product_"+productId+"_qty", qty);
-  localStorage.setItem("quantity", quantity);
-
-  
-  qty.onchange = function(){
-	  var quantity = this.value;
-	  localStorage.setItem("quantity", quantity);  
-	}
+quantityInput.addEventListener('change', updateQuantity);
+quantityInput.addEventListener('input', updateQuantity);
+function updateQuantity() {
+console.log('Số lượng hiện tại:', this.value);
+// Lưu giá trị số lượng vào một biến toàn cục hoặc data attribute
+document.body.setAttribute('data-quantity', this.value);
 }
-</script><script>
-  // Biến lưu số lượng
-  let cartCount = 0;
-  let count = 0;
-  // Lấy phần tử button
-  let btnAdd = document.getElementById("product-1");
 
-  // Hàm xử lý khi click nút Thêm
-  function addToCart() {
-    cartCount++;
-    count++;
-    console.log("in ra");
-    updateCart();
-  }
-  // Cập nhật số lượng
-  function updateCart(count) {
-	  console.log("lấy");
-        localStorage.setItem('count',cartCount)
-        console.log(cartCount)
-    document.getElementById("cart-total").innerText = cartCount;
-  }
-  // Bắt sự kiện click cho nút Thêm
+function addToCart() {
+// Lấy số lượng từ data attribute
+let quantity = parseInt(document.body.getAttribute('data-quantity') || "1");
+cartCount += quantity;
+console.log("Thêm vào giỏ hàng:", quantity, "sản phẩm");
+updateCart();
+}
+
+function updateCart() {
+localStorage.setItem('count', cartCount);
+console.log("Tổng số sản phẩm trong giỏ hàng:", cartCount);
+document.getElementById("cart-total").innerText = cartCount;
+}
+
+// Bắt sự kiện click cho nút Thêm
+btnAdd.addEventListener('click', addToCart);
+
+// Khởi tạo giá trị ban đầu
+updateCart();
+});
 </script>
+ 
 </body>
 
 </html>
